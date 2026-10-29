@@ -1,12 +1,6 @@
 //=============================================================================
 // ps_mult16_v2.v   (low-power revision of ps_mult16.v; module name unchanged)
 // Precision-scalable signed multiplier: sixteen 4x4 Baugh-Wooley blocks,
-// INT4 / INT8 / INT16, operand isolation, one flat carry-save-friendly sum.
-//
-//   a, b   : 16-bit operands          mode : 00 INT4 | 01 INT8 | 10 INT16 | 11 illegal
-//   en     : global enable            p    : signed product, 32 bit
-//   illegal: high in mode 11 (p = 0)  blk_en[4*i+j] : block (i,j) powered
-//
 // Changes w.r.t. v1 (ports, mode behaviour, blk_en and the names a_g_flat,
 // b_g_flat, pblk_flat are unchanged, so tb_ps_mult16 runs as before)
 //   1. Two-level operand isolation: each operand nibble is gated ONCE at the
