@@ -6,29 +6,7 @@
 //   a, b   : 16-bit operand ports (always 16 bits wide)
 //   mode   : 2'b00 INT4 | 2'b01 INT8 | 2'b10 INT16 | 2'b11 reserved/illegal
 //   en     : global enable; en=0 switches every block off
-//   p      : signed product, sign-extended to 32 bits
-//              INT4  : signed(a[3:0])  * signed(b[3:0])    (range +-2^6)
-//              INT8  : signed(a[7:0])  * signed(b[7:0])    (range +-2^14)
-//              INT16 : signed(a[15:0]) * signed(b[15:0])   (range +-2^30)
-//   illegal: high in the reserved mode (p = 0, all blocks off)
-//   blk_en : which 4x4 blocks are powered up, bit index = 4*i + j,
-//            block (i,j) multiplies A nibble i with B nibble j, weight 2^(4(i+j))
-//
-// Active blocks per mode
-//   INT4  : (0,0)                    -> 1 block
-//   INT8  : (0..1, 0..1)             -> 4 blocks
-//   INT16 : (0..3, 0..3)             -> 16 blocks
-//
-// Signedness of each nibble (only the TOP nibble of an operand is signed)
-//   INT4: nibble 0   INT8: nibble 1   INT16: nibble 3
-//
-// Operand isolation
-//   Every block gets its own AND-gated copy of the A nibble, B nibble and the
-//   two sign flags.  A disabled block therefore sees constant zeros on all of
-//   its inputs, so nothing inside it (partial products, adders) can toggle
-//   no matter what is on the upper operand bits.  This is NOT output masking:
-//   the arithmetic itself is held still.
-//
+
 // Purely combinational (registers belong to the surrounding PE).
 //=============================================================================
 `timescale 1ns/1ps
