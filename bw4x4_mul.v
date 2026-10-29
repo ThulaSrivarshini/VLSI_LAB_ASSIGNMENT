@@ -4,24 +4,7 @@
 //
 //   sa = 1 : a is a signed (two's complement) 4-bit value, else unsigned
 //   sb = 1 : b is a signed (two's complement) 4-bit value, else unsigned
-//
-// Output p is a 9-bit two's-complement result. 9 bits are enough for every
-// case:  u*u : 0..225   s*u : -120..105   s*s : -56..64   (range -256..255).
-// The user of the block must therefore SIGN-extend p (never zero-extend).
-//
-// Baugh-Wooley idea
-// -----------------
-// For a signed operand the MSB has weight -8, so every partial product that
-// involves a[3] or b[3] (but not both) is NEGATIVE, and a[3]*b[3] is negative
-// only when exactly one operand is signed.  A negative single-bit term can be
-// written   -x*2^k = (~x)*2^k - 2^k , so each such partial product is simply
-// XOR-ed with the relevant sign flag and a constant correction is added:
-//
-//     correction = -( (sa + sb)*56 + (sa ^ sb)*64 )        (mod 2^9)
-//
-//   sa=sb=1  ->  -112 (mod 256) = 2^4 + 2^7  : the classic 4x4 BW constants.
-//   sa=sb=0  ->  0, plain AND-array unsigned multiplier.
-//
+
 // Purely combinational, no latches, no tri-states.
 //=============================================================================
 `timescale 1ns/1ps
